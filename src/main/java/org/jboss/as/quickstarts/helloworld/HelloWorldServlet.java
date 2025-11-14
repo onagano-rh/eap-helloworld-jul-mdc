@@ -24,6 +24,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+// CHANGED
+import java.util.logging.Logger;
+import org.jboss.logging.MDC;
+
 /**
  *
  * <p>
@@ -36,6 +40,8 @@ import java.io.PrintWriter;
  */
 @WebServlet("/HelloWorld")
 public class HelloWorldServlet extends HttpServlet {
+    // CHANGED
+    static Logger LOG = Logger.getLogger(HelloWorldServlet.class.getName());
 
     static String PAGE_HEADER = "<html><head><title>helloworld</title></head><body>";
 
@@ -43,6 +49,11 @@ public class HelloWorldServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        // CHANGED
+        MDC.put("test", System.currentTimeMillis()); // キーを "test" にして任意の値を入れ込む
+        LOG.info("### JUL Logger called ###");
+        MDC.remove("test");
+
         resp.setContentType("text/html");
         PrintWriter writer = resp.getWriter();
         writer.println(PAGE_HEADER);

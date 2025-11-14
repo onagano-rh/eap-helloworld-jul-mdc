@@ -47,7 +47,12 @@
         <!-- the Maven project should use the minimum Java SE version supported -->
         <maven.compiler.release>17</maven.compiler.release>
         <!-- the versions for BOMs, Dependencies and Plugins -->
-        <version.bom.ee>8.1.0.GA-redhat-00013</version.bom.ee>
+        <!-- CHANGED
+        バージョンは8.1のままでも8.0にデプロイできるが、気になるなら合わせる。
+        どんなバージョンがあるかは以下のURLで確認できる。
+        https://maven.repository.redhat.com/ga/org/jboss/bom/jboss-eap-ee-with-tools/
+        -->
+        <version.bom.ee>8.0.10.GA-redhat-00006</version.bom.ee>
         <version.plugin.eap>2.0.0.Final-redhat-00009</version.plugin.eap>
         <version.plugin.wildfly>5.1.1.Final</version.plugin.wildfly>
     </properties>
@@ -71,6 +76,19 @@
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- CHANGED
+        トレースIDなどをログに入れ込むにはMDCという仕組みを使う。
+        JULにMDCの仕組みは無いが利用は可能で、MDCを使うためだけにJBoss Loggingを依存性に加える。
+        入れ込んだMDCはログフォーマッター側で "%X{mdc-key}" で参照できる。
+        [How do I use the MDC in JBoss EAP 7/6 logging?](https://access.redhat.com/solutions/302093)
+        [MDC(Mapped Diagnostic Context) support for JUL(Java.util.Logging)](https://stackoverflow.com/questions/16811885/mdcmapped-diagnostic-context-support-for-juljava-util-logging)
+        -->
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <scope>provided</scope> <!-- EAPにデプロイすれば見えるのでアプリに含める必要はない -->
         </dependency>
 
         <!-- Tests -->
