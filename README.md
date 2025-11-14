@@ -34,6 +34,12 @@ $ curl localhost:8080/helloworld/HelloWorld
 025-11-14 14:46:36,889 INFO  [org.jboss.as.quickstarts.helloworld.HelloWorldServlet] (default task-1) ### JUL Logger called ###
 ```
 
+参考までに、JSONフォーマッターの場合は以下のようになる。
+
+```
+{"timestamp":"2025-11-14T16:25:11.691+09:00","sequence":52,"loggerClassName":"org.jboss.logmanager.Logger","loggerName":"org.jboss.as.quickstarts.helloworld.HelloWorldServlet","level":"INFO","message":"### JUL Logger called ###","threadName":"default task-1","threadId":171,"mdc":{"test":"1763105111691"},"ndc":"","hostName":"p1gen4i","processName":"jboss-modules.jar","processId":3577515}
+```
+
 ## ログ設定のカスタマイズ
 
 以下のような仕様でログの出力方法を変更する。
@@ -56,6 +62,9 @@ standalone.xmlのロギングサブシステムに以下の内容をコピーし
             <formatter name="MY-PATTERN-2">
                 <pattern-formatter pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %X{test}%n"/>
             </formatter>
+            <formatter name="my-json-formatter">
+                <json-formatter/>
+            </formatter>
             <periodic-rotating-file-handler name="MY-FILE-1" autoflush="true">
                 <formatter>
                     <named-formatter name="MY-PATTERN-1"/>
@@ -67,6 +76,7 @@ standalone.xmlのロギングサブシステムに以下の内容をコピーし
             <periodic-rotating-file-handler name="MY-FILE-2" autoflush="true">
                 <formatter>
                     <named-formatter name="MY-PATTERN-2"/>
+                    <!-- <named-formatter name="my-json-formatter"/> -->
                 </formatter>
                 <file relative-to="jboss.server.log.dir" path="my-file-2.log"/>
                 <suffix value=".yyyy-MM-dd"/>
